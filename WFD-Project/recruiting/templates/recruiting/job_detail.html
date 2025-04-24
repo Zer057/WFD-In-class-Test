@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'job_list' %}">Jobs</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ job.title }}</li>
+                </ol>
+            </nav>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2 class="mb-0">{{ job.title }}</h2>
+                        {% if user.is_authenticated and user.is_candidate %}
+                            {% if has_applied %}
+                                <span class="badge bg-success">Applied</span>
+                            {% else %}
+                                <a href="{% url 'apply_job' job.id %}" class="btn btn-primary">Apply Now</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+
+                    <div class="company-info d-flex align-items-center mb-3">
+                        {% if job.company.logo %}
+                            <img src="{{ job.company.logo.url }}" alt="{{ job.company.name }}" class="me-2" style="width: 40px; height: 40px; object-fit: contain;">
+                        {% endif %}
+                        <div>
+                            <h5 class="mb-0">{{ job.company.name }}</h5>
+                            <span class="text-muted">{{ job.location }}</span>
+                        </div>
+                    </div>
+
+                    <div class="job-meta mb-4">
+                        <span class="badge bg-info me-2">{{ job.get_job_type_display }}</span>
+                        <span class="badge bg-secondary me-2">{{ job.get_experience_level_display }}</span>
+                        {% if job.salary_min and job.salary_max %}
+                            <span class="badge bg-light text-dark me-2">${{ job.salary_min|floatformat:0 }} - ${{ job.salary_max|floatformat:0 }}</span>
+                        {% endif %}
+                        <span class="badge bg-light text-dark">Posted {{ job.created_at|timesince }} ago</span>
+                    </div>
+
+                    <hr>
+
+                    <h5>Description</h5>
+                    <div class="job-description mb-4">
+                        {{ job.description|safe }}
+                    </div>
+
+                    <h5>Requirements</h5>
+                    <div class="job-requirements mb-4">
+                        {{ job.requirements|safe }}
+                    </div>
+
+                    <h5>Benefits</h5>
+                    <div class="job-benefits mb-4">
+                        {{ job.benefits|safe }}
+                    </div>
+
+                    {% if job.skills.all %}
+                        <h5>Required Skills</h5>
+                        <div class="job-skills mb-4">
+                            {% for skill in job.skills.all %}
+                                <span class="badge bg-primary me-2 mb-2">{{ skill.name }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="application-section mt-4">
+                        {% if user.is_authenticated and user.is_candidate %}
+                            {% if has_applied %}
+                                <div class="alert alert-success">
+                                    <p class="mb-0">You've already applied for this position on {{ application_date|date:"F j, Y" }}.</p>
+                                </div>
+                                <a href="{% url 'application_status' application_id %}" class="btn btn-outline-primary">View Application Status</a>
+                            {% else %}
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Ready to Apply?</h5>
+                                        <p class="card-text">Submit your application now and take the next step in your career journey.</p>
+                                        <a href="{% url 'apply_job' job.id %}" class="btn btn-primary">Apply for this Position</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% elif not user.is_authenticated %}
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h5 class="card-title">Interested in this role?</h5>
+                                    <p class="card-text">Please sign in or create an account to apply.</p>
+                                    <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-primary me-2">Sign In</a>
+                                    <a href="{% url 'register' %}?next={{ request.path }}" class="btn btn-outline-primary">Create Account</a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Job Summary</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <i class="bi bi-building"></i>
+                            <strong>Company:</strong> {{ job.company.name }}
+                        </li>
+                        <li class="mb-3">
+                            <i class="bi bi-geo-alt"></i>
+                            <strong>Location:</strong> {{ job.location }}
+                        </li>
+                        <li class="mb-3">
+                            <i class="bi bi-clock"></i>
+                            <strong>Job Type:</strong> {{ job.get_job_type_display }}
+                        </li>
+                        <li class="mb-3">
+                            <i class="bi bi-briefcase"></i>
+                            <strong>Experience:</strong> {{ job.get_experience_level_display }}
+                        </li>
+                        {% if job.salary_min and job.salary_max %}
+                            <li class="mb-3">
+                                <i class="bi bi-cash"></i>
+                                <strong>Salary Range:</strong> ${{ job.salary_min|floatformat:0 }} - ${{ job.salary_max|floatformat:0 }}
+                            </li>
+                        {% endif %}
+                        <li class="mb-3">
+                            <i class="bi bi-calendar"></i>
+                            <strong>Posted:</strong> {{ job.created_at|date:"F j, Y" }}
+                        </li>
+                        <li>
+                            <i class="bi bi-hourglass"></i>
+                            <strong>Application Deadline:</strong>
+                            {% if job.application_deadline %}
+                                {{ job.application_deadline|date:"F j, Y" }}
+                            {% else %}
+                                Open until filled
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">About {{ job.company.name }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="company-logo text-center mb-3">
+                        {% if job.company.logo %}
+                            <img src="{{ job.company.logo.url }}" alt="{{ job.company.name }}" style="max-width: 150px; max-height: 80px;">
+                        {% endif %}
+                    </div>
+                    <p>{{ job.company.description|truncatewords:50 }}</p>
+                    <a href="{% url 'company_detail' job.company.id %}" class="btn btn-outline-primary btn-sm">View Company Profile</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Similar Jobs</h5>
+                </div>
+                <div class="card-body">
+                    {% if similar_jobs %}
+                        <ul class="list-group list-group-flush">
+                            {% for similar_job in similar_jobs %}
+                                <li class="list-group-item">
+                                    <a href="{% url 'job_detail' similar_job.id %}">{{ similar_job.title }}</a>
+                                    <div class="small text-muted">{{ similar_job.company.name }} • {{ similar_job.location }}</div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">No similar jobs found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

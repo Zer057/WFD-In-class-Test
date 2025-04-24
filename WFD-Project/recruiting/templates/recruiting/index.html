@@ -1,0 +1,73 @@
+{% extends 'recruiting/base.html' %}
+
+{% block title %}Home - Retail Recruiting{% endblock %}
+
+{% block content %}
+    <div class="jumbotron">
+        <h1 class="display-4">Welcome to Retail Recruiting</h1>
+        <p class="lead">Your platform for managing retail recruitment processes.</p>
+        <hr class="my-4">
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Open Positions</h5>
+                    <p class="card-text display-4">{{ open_positions_count }}</p>
+                    <a href="{% url 'recruiting:position_list' %}" class="btn btn-primary">View Positions</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Candidates</h5>
+                    <p class="card-text display-4">{{ candidates_count }}</p>
+                    <a href="{% url 'recruiting:candidate_list' %}" class="btn btn-primary">View Candidates</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Submit Application</h5>
+                    <p class="card-text">Looking for a new opportunity?</p>
+                    <a href="{% url 'recruiting:application_create' %}" class="btn btn-success">Apply Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <h3>Recent Applications</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Candidate</th>
+                    <th>Position</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for application in recent_applications %}
+                    <tr>
+                        <td>{{ application.candidate }}</td>
+                        <td>{{ application.position }}</td>
+                        <td>
+                            <span class="badge bg-{% if application.status == 'accepted' %}success{% elif application.status == 'rejected' %}danger{% elif application.status == 'offered' %}warning{% else %}primary{% endif %}">
+                                {{ application.get_status_display }}
+                            </span>
+                        </td>
+                        <td>{{ application.application_date|date:"M d, Y" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No recent applications</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
