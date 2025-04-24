@@ -1,389 +1,598 @@
+# views.py
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.auth.models import Group
-from django.db.models import Count, Q
-from .models import Candidate, Skill, Job, Application
+from django.contrib.auth import login
+from django.http import HttpResponseForbidden
+from .models import User, Candidate, Recruiter, Manager, Job, JobSkill, Application, Interview, Skill, CandidateSkill
 from .forms import (
-    UserRegisterForm, CandidateProfileForm, SkillSelectionForm,
-    JobForm, ApplicationReviewForm, InterviewerAssignmentForm
+    UserRegisterForm, UserUpdateForm, CandidateUpdateForm, RecruiterUpdateForm,
+    ManagerUpdateForm, JobForm, JobSkillFormSet, ApplicationForm, ApplicationReviewForm,
+    InterviewForm, SkillForm, CandidateSkillForm
 )
 
 
-# Helper functions to check user roles
-def is_candidate(user):
-    return user.groups.filter(name='Candidate').exists()
-
-
-def is_recruiter(user):
-    return user.groups.filter(name='Recruiter').exists()
-
-
-def is_manager(user):
-    return user.groups.filter(name='Manager').exists()
-
-
-# Home/Dashboard view
-@login_required
+# Account Views
 def home(request):
-    if is_candidate(request.user):
-        # For candidates, show available jobs and application status
-        try:
-            candidate = request.user.candidate
-            applications = candidate.applications.all()
-            jobs = Job.objects.filter(status='approved')
-            return render(request, 'recruitment/candidate_dashboard.html', {
-                'applications': applications,
-                'jobs': jobs[:5]  # Show 5 latest jobs
-            })
-        except Candidate.DoesNotExist:
-            messages.warning(request, "Please complete your profile")
-            return redirect('recruitment:edit_profile')
-
-    elif is_recruiter(request.user):
-        # For recruiters, show jobs they created and recent applications
-        jobs = Job.objects.filter(created_by=request.user)
-        recent_applications = Application.objects.filter(job__created_by=request.user).order_by('-applied_date')[:10]
-        return render(request, 'recruitment/recruiter_dashboard.html', {
-            'jobs': jobs,
-            'recent_applications': recent_applications
-        })
-
-    elif is_manager(request.user):
-        # For managers, show pending approvals and hiring statistics
-        pending_jobs = Job.objects.filter(status='pending')
-        shortlisted = Application.objects.filter(status='shortlisted').count()
-        interviewing = Application.objects.filter(status='interviewing').count()
-        hiring_stats = {
-            'shortlisted': shortlisted,
-            'interviewing': interviewing,
-            'offered': Application.objects.filter(status='offered').count(),
-            'hired': Application.objects.filter(status='hired').count(),
-        }
-        return render(request, 'recruitment/manager_dashboard.html', {
-            'pending_jobs': pending_jobs,
-            'hiring_stats': hiring_stats
-        })
-
-    # If user doesn't belong to any specific group
-    return render(request, 'recruitment/home.html')
+    """Home page view"""
+    return render(request, 'home.html')
 
 
-# Authentication views
 def register(request):
+    """User registration view"""
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # Add user to the Candidate group
-            candidate_group = Group.objects.get(name='Candidate')
-            candidate_group.user_set.add(user)
-            # Create a Candidate profile
-            Candidate.objects.create(user=user)
-            messages.success(request, 'Account created! You can now login.')
-            return redirect('login')
+
+            # Create profile based on role
+            role = form.cleaned_data.get('role')
+            if role == 'candidate':
+                Candidate.objects.create(user=user)
+            elif role == 'recruiter':
+                Recruiter.objects.create(user=user)
+            elif role == 'manager':
+                Manager.objects.create(user=user)
+
+            login(request, user)
+            messages.success(request, f'Account created successfully! You are now logged in.')
+            return redirect('dashboard')
     else:
         form = UserRegisterForm()
-    return render(request, 'recruitment/register.html', {'form': form})
+    return render(request, 'register.html', {'form': form})
 
 
-# Candidate views
 @login_required
-@user_passes_test(is_candidate)
+def dashboard(request):
+    """Dashboard view based on user role"""
+    context = {}
+    if request.user.role == 'candidate':
+        # Get candidate's applications
+        applications = request.user.candidate_profile.applications.all()
+        context['applications'] = applications
+        # Get available jobs
+        context['jobs'] = Job.objects.filter(status='active')
+    elif request.user.role == 'recruiter':
+        # Get recruiter's posted jobs
+        jobs = request.user.recruiter_profile.posted_jobs.all()
+        context['jobs'] = jobs
+        # Get applications for recruiter's jobs
+        applications = Application.objects.filter(job__in=jobs)
+        context['applications'] = applications
+    elif request.user.role == 'manager':
+        # Get pending jobs for approval
+        pending_jobs = Job.objects.filter(status='pending_approval')
+        context['pending_jobs'] = pending_jobs
+        # Get shortlisted applications
+        shortlisted = Application.objects.filter(status='shortlisted')
+        context['shortlisted'] = shortlisted
+
+    return render(request, 'dashboard.html', context)
+
+
+@login_required
+def profile(request):
+    """View user profile"""
+    if request.user.role == 'candidate':
+        skills = request.user.candidate_profile.skills.all()
+        return render(request, 'profile.html', {'skills': skills})
+    return render(request, 'profile.html')
+
+
+@login_required
 def edit_profile(request):
-    try:
-        candidate = request.user.candidate
-    except Candidate.DoesNotExist:
-        candidate = Candidate.objects.create(user=request.user)
-
+    """Edit user profile"""
     if request.method == 'POST':
-        form = CandidateProfileForm(request.POST, request.FILES, instance=candidate)
-        if form.is_valid():
-            form.save()
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+
+        if request.user.role == 'candidate':
+            profile_form = CandidateUpdateForm(request.POST, request.FILES, instance=request.user.candidate_profile)
+        elif request.user.role == 'recruiter':
+            profile_form = RecruiterUpdateForm(request.POST, instance=request.user.recruiter_profile)
+        elif request.user.role == 'manager':
+            profile_form = ManagerUpdateForm(request.POST, instance=request.user.manager_profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
             messages.success(request, 'Your profile has been updated!')
-            return redirect('recruitment:home')
+            return redirect('profile')
     else:
-        form = CandidateProfileForm(instance=candidate)
+        user_form = UserUpdateForm(instance=request.user)
 
-    return render(request, 'recruitment/edit_profile.html', {'form': form})
+        if request.user.role == 'candidate':
+            profile_form = CandidateUpdateForm(instance=request.user.candidate_profile)
+        elif request.user.role == 'recruiter':
+            profile_form = RecruiterUpdateForm(instance=request.user.recruiter_profile)
+        elif request.user.role == 'manager':
+            profile_form = ManagerUpdateForm(instance=request.user.manager_profile)
 
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form
+    }
 
-@login_required
-@user_passes_test(is_candidate)
-def add_skills(request):
-    candidate = request.user.candidate
-
-    if request.method == 'POST':
-        form = SkillSelectionForm(request.POST)
-        if form.is_valid():
-            selected_skills = form.cleaned_data['skills']
-            candidate.skills.set(selected_skills)
-            messages.success(request, 'Your skills have been updated!')
-            return redirect('recruitment:home')
-    else:
-        form = SkillSelectionForm(initial={'skills': candidate.skills.all()})
-
-    return render(request, 'recruitment/add_skills.html', {'form': form})
+    return render(request, 'edit_profile.html', context)
 
 
+# Job Views
 @login_required
 def job_list(request):
-    jobs = Job.objects.filter(status='approved')
-    return render(request, 'recruitment/job_list.html', {'jobs': jobs})
+    """List all active jobs"""
+    jobs = Job.objects.filter(status='active')
+    return render(request, 'job_list.html', {'jobs': jobs})
 
 
 @login_required
 def job_detail(request, job_id):
+    """View details of a specific job"""
     job = get_object_or_404(Job, id=job_id)
 
-    # Check if the candidate has already applied
-    already_applied = False
-    if is_candidate(request.user):
-        try:
-            candidate = request.user.candidate
-            already_applied = Application.objects.filter(candidate=candidate, job=job).exists()
-        except Candidate.DoesNotExist:
-            pass
+    # Check if candidate has already applied
+    has_applied = False
+    if request.user.role == 'candidate':
+        has_applied = Application.objects.filter(
+            candidate=request.user.candidate_profile,
+            job=job
+        ).exists()
 
-    return render(request, 'recruitment/job_detail.html', {
+    return render(request, 'job_detail.html', {
         'job': job,
-        'already_applied': already_applied
+        'has_applied': has_applied
     })
 
 
 @login_required
-@user_passes_test(is_candidate)
-def apply_for_job(request, job_id):
-    job = get_object_or_404(Job, id=job_id, status='approved')
-    candidate = request.user.candidate
+def job_create(request):
+    """Create a new job posting"""
+    if request.user.role != 'recruiter':
+        return HttpResponseForbidden("You don't have permission to create jobs")
 
-    # Check if already applied
-    if Application.objects.filter(candidate=candidate, job=job).exists():
-        messages.warning(request, 'You have already applied for this job.')
-        return redirect('recruitment:job_detail', job_id=job.id)
-
-    # Create application
-    Application.objects.create(candidate=candidate, job=job)
-    messages.success(request, f'You have successfully applied for {job.title}!')
-    return redirect('recruitment:my_applications')
-
-
-@login_required
-@user_passes_test(is_candidate)
-def my_applications(request):
-    try:
-        candidate = request.user.candidate
-        applications = candidate.applications.all().order_by('-applied_date')
-    except Candidate.DoesNotExist:
-        applications = []
-        messages.warning(request, "Please complete your profile first.")
-        return redirect('recruitment:edit_profile')
-
-    return render(request, 'recruitment/my_applications.html', {'applications': applications})
-
-
-# Recruiter views
-@login_required
-@user_passes_test(lambda u: is_recruiter(u) or is_manager(u))
-def create_job(request):
     if request.method == 'POST':
         form = JobForm(request.POST)
-        if form.is_valid():
+        formset = JobSkillFormSet(request.POST)
+
+        if form.is_valid() and formset.is_valid():
             job = form.save(commit=False)
-            job.created_by = request.user
-            # If created by manager, automatically approve
-            if is_manager(request.user):
-                job.status = 'approved'
-                job.approved_by = request.user
-            else:
-                job.status = 'pending'
+            job.recruiter = request.user.recruiter_profile
+            job.status = 'pending_approval'
             job.save()
-            form.save_m2m()  # Save many-to-many fields (required_skills)
-            messages.success(request, 'Job posting created!')
-            return redirect('recruitment:home')
+
+            for skill_form in formset:
+                if skill_form.cleaned_data and not skill_form.cleaned_data.get('DELETE', False):
+                    skill = skill_form.save(commit=False)
+                    skill.job = job
+                    skill.save()
+
+            messages.success(request, 'Job posting created and sent for approval!')
+            return redirect('job_detail', job_id=job.id)
     else:
         form = JobForm()
+        formset = JobSkillFormSet(queryset=JobSkill.objects.none())
 
-    return render(request, 'recruitment/create_job.html', {'form': form})
+    return render(request, 'job_form.html', {'form': form, 'formset': formset})
 
 
 @login_required
-@user_passes_test(lambda u: is_recruiter(u) or is_manager(u))
-def edit_job(request, job_id):
+def job_edit(request, job_id):
+    """Edit an existing job posting"""
     job = get_object_or_404(Job, id=job_id)
 
-    # Only creator or manager can edit
-    if not (job.created_by == request.user or is_manager(request.user)):
-        messages.error(request, "You don't have permission to edit this job.")
-        return redirect('recruitment:home')
+    if request.user.role != 'recruiter' or job.recruiter.user != request.user:
+        return HttpResponseForbidden("You don't have permission to edit this job")
+
+    if job.status not in ['draft', 'pending_approval']:
+        messages.error(request, 'Cannot edit a job that has been approved or is active.')
+        return redirect('job_detail', job_id=job.id)
 
     if request.method == 'POST':
         form = JobForm(request.POST, instance=job)
-        if form.is_valid():
-            # If edited by recruiter, set back to pending
-            if is_recruiter(request.user) and not is_manager(request.user):
-                job = form.save(commit=False)
-                job.status = 'pending'
-                job.approved_by = None
-                job.save()
-                form.save_m2m()
-            else:
-                form.save()
-            messages.success(request, 'Job posting updated!')
-            return redirect('recruitment:job_detail', job_id=job.id)
+        formset = JobSkillFormSet(request.POST, queryset=job.required_skills.all())
+
+        if form.is_valid() and formset.is_valid():
+            job = form.save()
+
+            for skill_form in formset:
+                if skill_form.cleaned_data:
+                    if skill_form.cleaned_data.get('DELETE', False):
+                        if skill_form.instance.pk:
+                            skill_form.instance.delete()
+                    else:
+                        skill = skill_form.save(commit=False)
+                        skill.job = job
+                        skill.save()
+
+            messages.success(request, 'Job posting updated successfully!')
+            return redirect('job_detail', job_id=job.id)
     else:
         form = JobForm(instance=job)
+        formset = JobSkillFormSet(queryset=job.required_skills.all())
 
-    return render(request, 'recruitment/edit_job.html', {'form': form, 'job': job})
+    return render(request, 'job_form.html', {'form': form, 'formset': formset, 'job': job})
 
 
 @login_required
-@user_passes_test(lambda u: is_recruiter(u) or is_manager(u))
-def job_applicants(request, job_id):
+def job_delete(request, job_id):
+    """Delete a job posting"""
     job = get_object_or_404(Job, id=job_id)
 
-    # Only creator or manager can view applicants
-    if not (job.created_by == request.user or is_manager(request.user)):
-        messages.error(request, "You don't have permission to view applicants for this job.")
-        return redirect('recruitment:home')
+    if request.user.role != 'recruiter' or job.recruiter.user != request.user:
+        return HttpResponseForbidden("You don't have permission to delete this job")
 
-    applications = job.applications.all().select_related('candidate__user')
+    if request.method == 'POST':
+        job.delete()
+        messages.success(request, 'Job posting deleted successfully!')
+        return redirect('manage_jobs')
 
-    # Filter by status if requested
-    status_filter = request.GET.get('status', '')
-    if status_filter:
-        applications = applications.filter(status=status_filter)
+    return render(request, 'job_confirm_delete.html', {'job': job})
 
-    return render(request, 'recruitment/job_applicants.html', {
-        'job': job,
-        'applications': applications,
-        'status_filter': status_filter
+
+@login_required
+def manage_jobs(request):
+    """Manage job postings for recruiters and managers"""
+    if request.user.role == 'recruiter':
+        jobs = Job.objects.filter(recruiter=request.user.recruiter_profile)
+    elif request.user.role == 'manager':
+        jobs = Job.objects.filter(status='pending_approval')
+    else:
+        return HttpResponseForbidden("You don't have permission to manage jobs")
+
+    return render(request, 'manage_jobs.html', {'jobs': jobs})
+
+
+@login_required
+def approve_job(request, job_id):
+    """Approve a pending job posting"""
+    if request.user.role != 'manager':
+        return HttpResponseForbidden("You don't have permission to approve jobs")
+
+    job = get_object_or_404(Job, id=job_id)
+
+    if job.status != 'pending_approval':
+        messages.error(request, 'This job is not pending approval.')
+        return redirect('manage_jobs')
+
+    if request.method == 'POST':
+        job.status = 'active'
+        job.approved_by = request.user.manager_profile
+        job.save()
+        messages.success(request, 'Job approved successfully!')
+        return redirect('manage_jobs')
+
+    return render(request, 'approve_job.html', {'job': job})
+
+
+# Application Views
+@login_required
+def application_list(request):
+    """List applications for a candidate"""
+    if request.user.role == 'candidate':
+        applications = Application.objects.filter(candidate=request.user.candidate_profile)
+    else:
+        return HttpResponseForbidden("Only candidates can view their applications")
+
+    return render(request, 'application_list.html', {'applications': applications})
+
+
+@login_required
+def application_create(request, job_id):
+    """Create a new job application"""
+    if request.user.role != 'candidate':
+        return HttpResponseForbidden("Only candidates can apply for jobs")
+
+    job = get_object_or_404(Job, id=job_id)
+
+    # Check if already applied
+    if Application.objects.filter(candidate=request.user.candidate_profile, job=job).exists():
+        messages.error(request, 'You have already applied for this job.')
+        return redirect('job_detail', job_id=job.id)
+
+    if request.method == 'POST':
+        form = ApplicationForm(request.POST)
+        if form.is_valid():
+            application = form.save(commit=False)
+            application.candidate = request.user.candidate_profile
+            application.job = job
+            application.save()
+            messages.success(request, 'Application submitted successfully!')
+            return redirect('application_detail', application_id=application.id)
+    else:
+        form = ApplicationForm()
+
+    return render(request, 'application_form.html', {'form': form, 'job': job})
+
+
+@login_required
+def application_detail(request, application_id):
+    """View details of a specific application"""
+    application = get_object_or_404(Application, id=application_id)
+
+    # Permission check
+    if request.user.role == 'candidate' and application.candidate.user != request.user:
+        return HttpResponseForbidden("You don't have permission to view this application")
+
+    if request.user.role == 'recruiter' and application.job.recruiter.user != request.user:
+        return HttpResponseForbidden("You don't have permission to view this application")
+
+    return render(request, 'application_detail.html', {'application': application})
+
+
+@login_required
+def withdraw_application(request, application_id):
+    """Withdraw a job application"""
+    application = get_object_or_404(Application, id=application_id)
+
+    if request.user.role != 'candidate' or application.candidate.user != request.user:
+        return HttpResponseForbidden("You don't have permission to withdraw this application")
+
+    if request.method == 'POST':
+        application.delete()
+        messages.success(request, 'Application withdrawn successfully!')
+        return redirect('application_list')
+
+    return render(request, 'withdraw_application.html', {'application': application})
+
+
+@login_required
+def manage_applications(request):
+    """Manage applications for recruiters"""
+    if request.user.role != 'recruiter':
+        return HttpResponseForbidden("Only recruiters can manage applications")
+
+    # Get all jobs posted by this recruiter
+    recruiter_jobs = request.user.recruiter_profile.posted_jobs.all()
+
+    # Get all applications for these jobs
+    applications = Application.objects.filter(job__in=recruiter_jobs)
+
+    return render(request, 'manage_applications.html', {'applications': applications})
+
+
+@login_required
+def review_application(request, application_id):
+    """Review a job application"""
+    application = get_object_or_404(Application, id=application_id)
+
+    if request.user.role != 'recruiter' or application.job.recruiter.user != request.user:
+        return HttpResponseForbidden("You don't have permission to review this application")
+
+    if request.method == 'POST':
+        form = ApplicationReviewForm(request.POST, instance=application)
+        if form.is_valid():
+            application = form.save(commit=False)
+            application.reviewed_by = request.user.recruiter_profile
+            application.save()
+            messages.success(request, 'Application reviewed successfully!')
+            return redirect('manage_applications')
+    else:
+        form = ApplicationReviewForm(instance=application)
+
+    return render(request, 'review_application.html', {'form': form, 'application': application})
+
+
+@login_required
+def shortlist_application(request, application_id):
+    """Shortlist a candidate's application"""
+    application = get_object_or_404(Application, id=application_id)
+
+    if request.user.role != 'recruiter' or application.job.recruiter.user != request.user:
+        return HttpResponseForbidden("You don't have permission to shortlist this application")
+
+    if request.method == 'POST':
+        application.status = 'shortlisted'
+        application.save()
+        messages.success(request, 'Candidate shortlisted successfully!')
+        return redirect('manage_applications')
+
+    return render(request, 'shortlist_application.html', {'application': application})
+
+
+@login_required
+def schedule_interview(request, application_id):
+    """Schedule an interview for a candidate"""
+    application = get_object_or_404(Application, id=application_id)
+
+    if request.user.role not in ['recruiter', 'manager']:
+        return HttpResponseForbidden("You don't have permission to schedule interviews")
+
+    if request.user.role == 'recruiter' and application.job.recruiter.user != request.user:
+        return HttpResponseForbidden("You don't have permission to schedule interviews for this application")
+
+    if application.status not in ['shortlisted', 'interview_scheduled']:
+        messages.error(request, 'Can only schedule interviews for shortlisted candidates.')
+        return redirect('application_detail', application_id=application.id)
+
+    if request.method == 'POST':
+        form = InterviewForm(request.POST)
+        if form.is_valid():
+            interview = form.save(commit=False)
+            interview.application = application
+
+            if request.user.role == 'manager':
+                interview.assigned_by = request.user.manager_profile
+
+            interview.save()
+
+            # Update application status
+            application.status = 'interview_scheduled'
+            application.save()
+
+            messages.success(request, 'Interview scheduled successfully!')
+            return redirect('application_detail', application_id=application.id)
+    else:
+        form = InterviewForm()
+
+    return render(request, 'schedule_interview.html', {'form': form, 'application': application})
+
+
+@login_required
+def interview_list(request):
+    """List interviews for users based on their role"""
+    if request.user.role == 'candidate':
+        # Get all applications for this candidate
+        applications = Application.objects.filter(candidate=request.user.candidate_profile)
+        # Get all interviews for these applications
+        interviews = Interview.objects.filter(application__in=applications)
+    elif request.user.role in ['recruiter', 'manager']:
+        # Get all interviews where this user is the interviewer
+        interviews = Interview.objects.filter(interviewer=request.user)
+    else:
+        return HttpResponseForbidden("You don't have permission to view interviews")
+
+    return render(request, 'interview_list.html', {'interviews': interviews})
+
+
+# Skill Views
+@login_required
+def skill_list(request):
+    """List all available skills"""
+    skills = Skill.objects.all()
+    return render(request, 'skill_list.html', {'skills': skills})
+
+
+@login_required
+def add_skill(request):
+    """Add a new skill to the system"""
+    if request.user.role != 'recruiter':
+        return HttpResponseForbidden("Only recruiters can add skills to the system")
+
+    if request.method == 'POST':
+        form = SkillForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Skill added successfully!')
+            return redirect('skill_list')
+    else:
+        form = SkillForm()
+
+    return render(request, 'add_skill.html', {'form': form})
+
+
+@login_required
+def my_skills(request):
+    """View and manage candidate skills"""
+    if request.user.role != 'candidate':
+        return HttpResponseForbidden("Only candidates can view their skills")
+
+    candidate_skills = CandidateSkill.objects.filter(candidate=request.user.candidate_profile)
+
+    if request.method == 'POST':
+        form = CandidateSkillForm(request.POST)
+        if form.is_valid():
+            skill = form.save(commit=False)
+            skill.candidate = request.user.candidate_profile
+
+            # Check if skill already exists for this candidate
+            if CandidateSkill.objects.filter(candidate=request.user.candidate_profile, skill=skill.skill).exists():
+                messages.error(request, 'You already have this skill in your profile.')
+            else:
+                skill.save()
+                messages.success(request, 'Skill added to your profile!')
+
+            return redirect('my_skills')
+    else:
+        form = CandidateSkillForm()
+
+    # Exclude skills already added by the candidate
+    existing_skills = candidate_skills.values_list('skill', flat=True)
+    form.fields['skill'].queryset = Skill.objects.exclude(id__in=existing_skills)
+
+    return render(request, 'my_skills.html', {
+        'candidate_skills': candidate_skills,
+        'form': form
     })
 
 
 @login_required
-@user_passes_test(lambda u: is_recruiter(u) or is_manager(u))
-def candidate_list(request):
-    candidates = Candidate.objects.all().select_related('user')
+def add_skill_to_profile(request, skill_id):
+    """Add existing skill to candidate profile"""
+    if request.user.role != 'candidate':
+        return HttpResponseForbidden("Only candidates can add skills to their profile")
 
-    # Filter by skill if requested
+    skill = get_object_or_404(Skill, id=skill_id)
+
+    # Check if already exists
+    if CandidateSkill.objects.filter(candidate=request.user.candidate_profile, skill=skill).exists():
+        messages.error(request, 'You already have this skill in your profile.')
+        return redirect('my_skills')
+
+    if request.method == 'POST':
+        form = CandidateSkillForm(request.POST)
+        if form.is_valid():
+            candidate_skill = form.save(commit=False)
+            candidate_skill.candidate = request.user.candidate_profile
+            candidate_skill.skill = skill
+            candidate_skill.save()
+            messages.success(request, f'{skill.name} added to your profile!')
+            return redirect('my_skills')
+    else:
+        form = CandidateSkillForm(initial={'skill': skill})
+        form.fields['skill'].widget.attrs['disabled'] = True
+
+    return render(request, 'add_skill_to_profile.html', {'form': form, 'skill': skill})
+
+
+@login_required
+def remove_skill_from_profile(request, skill_id):
+    """Remove skill from candidate profile"""
+    if request.user.role != 'candidate':
+        return HttpResponseForbidden("Only candidates can remove skills from their profile")
+
+    candidate_skill = get_object_or_404(
+        CandidateSkill,
+        candidate=request.user.candidate_profile,
+        skill_id=skill_id
+    )
+
+    if request.method == 'POST':
+        candidate_skill.delete()
+        messages.success(request, 'Skill removed from your profile!')
+        return redirect('my_skills')
+
+    return render(request, 'remove_skill_from_profile.html', {'candidate_skill': candidate_skill})
+
+
+# Filter candidates by skills
+@login_required
+def filter_candidates_by_skills(request):
+    """Filter candidates based on skills"""
+    if request.user.role != 'recruiter':
+        return HttpResponseForbidden("Only recruiters can filter candidates by skills")
+
+    candidates = Candidate.objects.all()
     skills = Skill.objects.all()
 
-    return render(request, 'recruitment/candidate_list.html', {
+    if request.method == 'GET':
+        selected_skills = request.GET.getlist('skills')
+        min_proficiency = request.GET.get('min_proficiency')
+
+        if selected_skills:
+            # Filter candidates who have all the selected skills
+            for skill_id in selected_skills:
+                candidates = candidates.filter(skills__skill_id=skill_id)
+
+            if min_proficiency:
+                # Further filter by minimum proficiency level
+                candidates = candidates.filter(skills__proficiency_level__gte=min_proficiency)
+
+    return render(request, 'filter_candidates.html', {
         'candidates': candidates,
         'skills': skills
     })
 
 
+# Final hiring decision
 @login_required
-@user_passes_test(lambda u: is_recruiter(u) or is_manager(u))
-def candidates_by_skill(request, skill_id):
-    skill = get_object_or_404(Skill, id=skill_id)
-    candidates = Candidate.objects.filter(skills=skill).select_related('user')
-
-    return render(request, 'recruitment/candidates_by_skill.html', {
-        'skill': skill,
-        'candidates': candidates
-    })
-
-
-@login_required
-@user_passes_test(lambda u: is_recruiter(u) or is_manager(u))
-def review_application(request, application_id):
-    application = get_object_or_404(Application, id=application_id)
-
-    # Only job creator or manager can review
-    if not (application.job.created_by == request.user or is_manager(request.user)):
-        messages.error(request, "You don't have permission to review this application.")
-        return redirect('recruitment:home')
-
-    if request.method == 'POST':
-        form = ApplicationReviewForm(request.POST, instance=application)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Application status updated!')
-            return redirect('recruitment:job_applicants', job_id=application.job.id)
-    else:
-        form = ApplicationReviewForm(instance=application)
-
-    return render(request, 'recruitment/review_application.html', {
-        'form': form,
-        'application': application
-    })
-
-
-@login_required
-@user_passes_test(lambda u: is_recruiter(u) or is_manager(u))
-def shortlist_candidate(request, application_id):
-    application = get_object_or_404(Application, id=application_id)
-
-    # Only job creator or manager can shortlist
-    if not (application.job.created_by == request.user or is_manager(request.user)):
-        messages.error(request, "You don't have permission to shortlist this candidate.")
-        return redirect('recruitment:home')
-
-    application.status = 'shortlisted'
-    application.save()
-    messages.success(request, f'{application.candidate.user.get_full_name()} has been shortlisted!')
-
-    return redirect('recruitment:job_applicants', job_id=application.job.id)
-
-
-# Manager views
-@login_required
-@user_passes_test(is_manager)
-def pending_jobs(request):
-    jobs = Job.objects.filter(status='pending')
-    return render(request, 'recruitment/pending_jobs.html', {'jobs': jobs})
-
-
-@login_required
-@user_passes_test(is_manager)
-def approve_job(request, job_id):
-    job = get_object_or_404(Job, id=job_id, status='pending')
-    job.status = 'approved'
-    job.approved_by = request.user
-    job.save()
-    messages.success(request, f'Job posting "{job.title}" has been approved!')
-    return redirect('recruitment:pending_jobs')
-
-
-@login_required
-@user_passes_test(is_manager)
-def shortlisted_candidates(request):
-    applications = Application.objects.filter(
-        Q(status='shortlisted') | Q(status='interviewing')
-    ).select_related('candidate__user', 'job')
-
-    return render(request, 'recruitment/shortlisted_candidates.html', {'applications': applications})
-
-
-@login_required
-@user_passes_test(is_manager)
-def assign_interviewer(request, application_id):
-    application = get_object_or_404(Application, id=application_id, status='shortlisted')
-
-    if request.method == 'POST':
-        form = InterviewerAssignmentForm(request.POST, instance=application)
-        if form.is_valid():
-            application = form.save(commit=False)
-            application.status = 'interviewing'
-            application.save()
-            messages.success(request, f'Interviewer assigned for {application.candidate.user.get_full_name()}!')
-            return redirect('recruitment:shortlisted_candidates')
-    else:
-        form = InterviewerAssignmentForm(instance=application)
-
-    return render(request, 'recruitment/assign_interviewer.html', {
-        'form': form,
-        'application': application
-    })
-
-
-@login_required
-@user_passes_test(is_manager)
 def finalize_hiring(request, application_id):
+    """Make final hiring decision on a candidate"""
     application = get_object_or_404(Application, id=application_id)
+
+    if request.user.role != 'manager':
+        return HttpResponseForbidden("Only managers can make final hiring decisions")
+
+    if application.status not in ['interview_scheduled', 'offered']:
+        messages.error(request, 'Can only make hiring decisions for interviewed candidates.')
+        return redirect('application_detail', application_id=application.id)
 
     if request.method == 'POST':
         decision = request.POST.get('decision')
@@ -393,12 +602,12 @@ def finalize_hiring(request, application_id):
             messages.success(request, f'{application.candidate.user.get_full_name()} has been hired!')
         elif decision == 'reject':
             application.status = 'rejected'
-            messages.info(request, f'{application.candidate.user.get_full_name()} has been rejected.')
+            messages.success(request, 'Application has been rejected.')
         elif decision == 'offer':
             application.status = 'offered'
-            messages.success(request, f'Offer extended to {application.candidate.user.get_full_name()}!')
+            messages.success(request, 'Job offer has been sent to the candidate.')
 
         application.save()
-        return redirect('recruitment:shortlisted_candidates')
+        return redirect('application_detail', application_id=application.id)
 
-    return render(request, 'recruitment/finalize_hiring.html', {'application': application})
+    return render(request, 'finalize_hiring.html', {'application': application})

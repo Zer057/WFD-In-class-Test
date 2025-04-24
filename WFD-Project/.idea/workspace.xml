@@ -4,7 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c452653f-5975-4080-92f3-6554d5501533" name="Changes" comment="" />
+    <list default="true" id="c452653f-5975-4080-92f3-6554d5501533" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/accounts/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jobs/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skills/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/recruiting/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/recruiting/apps.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/recruiting/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/migrations/0002_create_groups.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/recruiting/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/templates/recruiting/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/recruiting/templates/recruiting/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/recruiting/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/recruiting/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruiting/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail_recruiting/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruiting/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail_recruiting/urls.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,8 +31,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -100,12 +118,23 @@
       <option name="presentableId" value="Default" />
       <updated>1745449078120</updated>
       <workItem from="1745449080440" duration="489000" />
-      <workItem from="1745449603121" duration="8066000" />
+      <workItem from="1745449603121" duration="22128000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
