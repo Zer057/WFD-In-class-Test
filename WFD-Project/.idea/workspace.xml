@@ -4,57 +4,119 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c452653f-5975-4080-92f3-6554d5501533" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/skills/template/base.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/skills/template/skills/edit_skills.html" afterDir="false" />
+    <list default="true" id="9498f0e3-af5d-49d2-b57e-52132f936abc" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/WFD-Project.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/WFD-In-class-Test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/WFD-In-class-Test.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recruiting/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/recruiting/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skills/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/skills/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skills/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/skills/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skills/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/skills/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/admin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/apps.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/tests.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/views.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/admin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/apps.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/tests.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/views.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/admin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/apps.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/tests.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/views.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/manage.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/admin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/apps.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/forms.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/templates/recruiting/add_skills.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/templates/recruiting/base.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/templates/recruiting/candidate_dashboard.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/templates/recruiting/edit_profile.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/templates/recruiting/home.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/templates/recruiting/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/templates/recruiting/job_detail.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/templates/recruiting/job_list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/templates/recruiting/login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/templates/recruiting/manager_dashboard.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/templates/recruiting/recruiter_dashboard.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/templates/recruiting/register.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/tests.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/recruiting/views.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruiting/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruiting/asgi.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruiting/settings.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruiting/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruiting/wsgi.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruitment/core/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruitment/core/admin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruitment/core/apps.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruitment/core/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruitment/core/migrations/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/api/axios.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruitment/core/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruitment/core/tests.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruitment/core/views.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruitment/manage.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruitment/retail_recruitment/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail_recruitment_backend/skills/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruitment/retail_recruitment/asgi.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruitment/retail_recruitment/settings.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruitment/retail_recruitment/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail_recruitment/retail_recruitment/wsgi.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/skills/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/skills/admin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/skills/apps.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/skills/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/skills/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/skills/template/base.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/skills/template/skills/edit_skills.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/skills/tests.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/skills/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/skills/views.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-        <option value="HTML File" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;Zer057&quot;
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Zer057"
   }
-}</component>
+}]]></component>
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
     "url": "https://github.com/Zer057/WFD-In-class-Test.git",
     "accountId": "5a93ebf5-92d1-43a7-a81a-4dc87d7f8cdb"
   }
 }]]></component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 3
-}</component>
-  <component name="ProjectId" id="2w9LvwApFZlvUjytbC8397wFH9O" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 3
+}]]></component>
+  <component name="ProjectId" id="2wgXTDwlcnNzlGTsqOgSaysPkog" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
@@ -102,29 +164,17 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="c452653f-5975-4080-92f3-6554d5501533" name="Changes" comment="" />
-      <created>1745449078120</created>
+      <changelist id="9498f0e3-af5d-49d2-b57e-52132f936abc" name="Changes" comment="" />
+      <created>1746464195539</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1745449078120</updated>
-      <workItem from="1745449080440" duration="489000" />
-      <workItem from="1745449603121" duration="24024000" />
+      <updated>1746464195539</updated>
+      <workItem from="1746464196650" duration="2644000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
