@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9498f0e3-af5d-49d2-b57e-52132f936abc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/recruitment/candidates/templates/candidates/signin.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recruitment/candidates/templates/candidates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/recruitment/candidates/templates/candidates/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recruitment/candidates/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/recruitment/candidates/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recruitment/candidates/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/recruitment/candidates/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recruitment/recruitment/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/recruitment/recruitment/urls.py" afterDir="false" />
-    </list>
+    <list default="true" id="9498f0e3-af5d-49d2-b57e-52132f936abc" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -111,7 +104,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1746464195539</updated>
-      <workItem from="1746464196650" duration="53081000" />
+      <workItem from="1746464196650" duration="53686000" />
     </task>
     <servers />
   </component>
