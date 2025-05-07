@@ -24,4 +24,9 @@ urlpatterns = [
     path('candidates/<int:pk>/update/', views.CandidateUpdateView.as_view(), name='candidate_update'),
     path('candidates/<int:pk>/edit/', views.CandidateUpdateView.as_view(), name='candidate_edit'),  # Alias for update
     path('candidates/<int:pk>/delete/', views.CandidateDeleteView.as_view(), name='candidate_delete'),
+
+    # Log in Urls
+
+
+    # Register Urls
 ]

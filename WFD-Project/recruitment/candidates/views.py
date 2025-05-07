@@ -4,6 +4,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import Candidate, Job, Skill
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import TemplateView
+from django.views import View
 
 # -------------------------
 # JOB VIEWS
@@ -100,3 +101,7 @@ class CandidateDeleteView(PermissionRequiredMixin, DeleteView):
     template_name = 'candidates/candidate_confirm_delete.html'
     success_url = reverse_lazy('candidate_list')
     permission_required = 'recruitment.delete_candidate'
+
+    class RegisterView(View):
+        def get(self, request):
+            return render(request, 'register.html')

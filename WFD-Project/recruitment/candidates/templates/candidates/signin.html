@@ -1,0 +1,87 @@
+{% extends "candidates/base.html" %}
+
+{% block title %}Sign In - JobConnect Recruiting Platform{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="card-title mb-0">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In to Your Account
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <p class="text-muted mb-4">Fill in the form below to access your JobConnect account.</p>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">Username or Email<span class="text-danger">*</span></label>
+                            {{ form.username|default:"<input type='text' name='username' class='form-control' id='id_username' required>" }}
+                            {% if form.username.errors %}
+                                <div class="text-danger">
+                                    {{ form.username.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_password" class="form-label">Password<span class="text-danger">*</span></label>
+                            {{ form.password|default:"<input type='password' name='password' class='form-control' id='id_password' required>" }}
+                            {% if form.password.errors %}
+                                <div class="text-danger">
+                                    {{ form.password.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="remember_me">
+                            <label class="form-check-label" for="remember_me">
+                                Remember me
+                            </label>
+                        </div>
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-sign-in-alt me-1"></i>Sign In
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer bg-light text-center py-3">
+                    Don't have an account? <a href="{% url 'register' %}" class="text-decoration-none">Register here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Script to handle form validation and submission if needed
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+
+        form.addEventListener('submit', function(event) {
+            const username = document.getElementById('id_username');
+            const password = document.getElementById('id_password');
+
+            if (!username.value || !password.value) {
+                event.preventDefault();
+                alert('Please enter both username/email and password.');
+            }
+        });
+    });
+</script>
+{% endblock %}
