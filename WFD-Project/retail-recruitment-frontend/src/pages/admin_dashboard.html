@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Admin Dashboard</h1>
+<p>Welcome, {{ request.user.username }}!</p>
+
+<ul>
+  <li><a href="{% url 'admin:index' %}">Go to Django Admin</a></li>
+  <li><a href="/recruitment/manage-users/">Manage Users</a></li>
+  <li><a href="/recruitment/manage-candidates/">Manage Candidates</a></li>
+</ul>
+{% endblock %}

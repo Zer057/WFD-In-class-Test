@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Listings</title>
+</head>
+<body>
+    <header>
+        <h1>Job Listings</h1>
+        <nav>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="profile.html">My Profile</a>
+            <a href="applications.html">My Applications</a>
+            <a href="logout.html">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="job-filters">
+            <h2>Search Jobs</h2>
+            <form id="filter-form">
+                <div>
+                    <label for="keyword">Keywords:</label>
+                    <input type="text" id="keyword" name="keyword" placeholder="Job title, skills, or company">
+                </div>
+
+                <div>
+                    <label for="location">Location:</label>
+                    <input type="text" id="location" name="location" placeholder="City, state, or remote">
+                </div>
+
+                <div>
+                    <label for="job-type">Job Type:</label>
+                    <select id="job-type" name="job-type">
+                        <option value="">All Types</option>
+                        <option value="full-time">Full Time</option>
+                        <option value="part-time">Part Time</option>
+                        <option value="contract">Contract</option>
+                        <option value="internship">Internship</option>
+                        <option value="remote">Remote</option>
+                    </select>
+                </div>
+
+                <div>
+                    <button type="submit">Search Jobs</button>
+                    <button type="reset">Clear Filters</button>
+                </div>
+            </form>
+        </section>
+
+        <section id="job-list">
+            <h2>Available Positions</h2>
+
+            <article class="job-card">
+                <h3>Software Developer</h3>
+                <p>Company: Tech Solutions Inc.</p>
+                <p>Location: San Francisco, CA</p>
+                <p>Type: Full Time</p>
+                <p>Posted: May 1, 2025</p>
+                <a href="job-detail-1.html">View Details</a>
+                <a href="apply-1.html">Apply Now</a>
+            </article>
+
+            <article class="job-card">
+                <h3>Project Manager</h3>
+                <p>Company: Global Innovations</p>
+                <p>Location: Remote</p>
+                <p>Type: Contract</p>
+                <p>Posted: May 3, 2025</p>
+                <a href="job-detail-2.html">View Details</a>
+                <a href="apply-2.html">Apply Now</a>
+            </article>
+
+            <article class="job-card">
+                <h3>Marketing Specialist</h3>
+                <p>Company: Brand Masters</p>
+                <p>Location: New York, NY</p>
+                <p>Type: Full Time</p>
+                <p>Posted: May 2, 2025</p>
+                <a href="job-detail-3.html">View Details</a>
+                <a href="apply-3.html">Apply Now</a>
+            </article>
+
+            <article class="job-card">
+                <h3>UX Designer</h3>
+                <p>Company: Creative Digital</p>
+                <p>Location: Chicago, IL</p>
+                <p>Type: Part Time</p>
+                <p>Posted: April 29, 2025</p>
+                <a href="job-detail-4.html">View Details</a>
+                <a href="apply-4.html">Apply Now</a>
+            </article>
+        </section>
+
+        <section id="pagination">
+            <a href="#">&laquo; Previous</a>
+            <span>Page 1 of 5</span>
+            <a href="#">Next &raquo;</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Job Portal. All rights reserved.</p>
+    </footer>
+</body>
+</html>

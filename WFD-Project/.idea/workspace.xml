@@ -5,38 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9498f0e3-af5d-49d2-b57e-52132f936abc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/jobs/api/jobApi.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/jobs/components/CandidateDashboard.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/jobs/components/CreateJobForm.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/jobs/components/JobDetail.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/jobs/components/JobList.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/jobs/components/JobList.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/jobs/components/LoginForm.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/jobs/components/ManagerDashboard.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/jobs/components/RecruiterDashboard.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/jobs/components/RegisterForm.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/jobs/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/pages/Dashboard.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/pages/Login.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/pages/Register.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/services/api.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail_recruitment_backend/jobs/serializers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail_recruitment_backend/jobs/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail_recruitment_backend/users/serializers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail_recruitment_backend/users/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/recruitment/candidates/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/recruitment/candidates/templates/candidates/base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/recruitment/candidates/templates/candidates/candidate_confirm_delete.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/recruitment/candidates/templates/candidates/candidate_detail.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/recruitment/candidates/templates/candidates/candidate_form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/recruitment/candidates/templates/candidates/candidate_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/recruitment/candidates/templates/candidates/home.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/recruitment/candidates/templates/candidates/job_confirm_delete.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/recruitment/candidates/templates/candidates/job_form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/recruitment/candidates/templates/candidates/job_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/recruitment/candidates/templates/candidates/skill_confirm_delete.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/recruitment/candidates/templates/candidates/skill_form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/recruitment/candidates/templates/candidates/skill_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/recruitment/candidates/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/pages/Job.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/pages/JobApplication.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/pages/JobDetails.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/pages/admin_dashboard.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/retail_recruitment_backend/retail_recruitment_backend/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail-recruitment-frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/retail-recruitment-frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail-recruitment-frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/retail-recruitment-frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail-recruitment-frontend/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/App.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/retail-recruitment-frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail-recruitment-frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail_recruitment_backend/jobs/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail_recruitment_backend/jobs/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail_recruitment_backend/jobs/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail_recruitment_backend/jobs/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail_recruitment_backend/retail_recruitment_backend/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail_recruitment_backend/retail_recruitment_backend/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail-recruitment-frontend/src/jobs/components/RegisterForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/retail-recruitment-frontend/src/jobs/components/RegisterForm.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/retail_recruitment_backend/retail_recruitment_backend/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail_recruitment_backend/retail_recruitment_backend/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail_recruitment_backend/skills/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail_recruitment_backend/skills/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail_recruitment_backend/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail_recruitment_backend/users/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail_recruitment_backend/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail_recruitment_backend/users/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +38,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="HTML File" />
         <option value="Python Script" />
       </list>
     </option>
@@ -76,8 +69,11 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Python.main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -133,7 +129,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1746464195539</updated>
-      <workItem from="1746464196650" duration="19209000" />
+      <workItem from="1746464196650" duration="48671000" />
     </task>
     <servers />
   </component>
@@ -150,5 +146,8 @@
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/WFD_Project$main.coverage" NAME="main Coverage Results" MODIFIED="1746620611927" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills Management - Recruiting Platform</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .skill-badge {
+            font-size: 0.9rem;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            display: inline-flex;
+            align-items: center;
+        }
+        .skill-badge .delete-btn {
+            margin-left: 6px;
+            font-size: 10px;
+            padding: 0 4px;
+        }
+        .modal-header {
+            border-bottom: 1px solid #dee2e6;
+            background-color: #f8f9fa;
+        }
+        .no-skills-placeholder {
+            padding: 2rem;
+            text-align: center;
+            color: #6c757d;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        .category-badge {
+            font-size: 12px;
+            font-weight: normal;
+            margin-left: 5px;
+            padding: 3px 8px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-briefcase me-2"></i>
+                JobConnect
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-plus-circle"></i> Post Job</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-list"></i> Job Listings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-users"></i> Candidates</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="#" class="btn btn-outline-light btn-sm me-2"><i class="fas fa-user"></i> Account</a>
+                    <a href="#" class="btn btn-light btn-sm"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 mb-4">
+                <!-- Sidebar Menu -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="card-title mb-0">System Settings</h5>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <i class="fas fa-building me-2"></i> Departments
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <i class="fas fa-map-marker-alt me-2"></i> Locations
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action active">
+                            <i class="fas fa-tools me-2"></i> Skills
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <i class="fas fa-graduation-cap me-2"></i> Qualifications
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <i class="fas fa-users-cog me-2"></i> User Management
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-9">
+                <!-- Page Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="mb-1"><i class="fas fa-tools text-primary me-2"></i>Skills Management</h2>
+                        <p class="text-muted mb-0">Manage skills used for job postings and candidate profiles</p>
+                    </div>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSkillModal">
+                        <i class="fas fa-plus me-1"></i>Add New Skill
+                    </button>
+                </div>
+
+                <!-- Search and Filter Bar -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search skills...">
+                                    <button class="btn btn-outline-secondary" type="button">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex gap-2">
+                                    <select class="form-select">
+                                        <option selected>All Categories</option>
+                                        <option>Technical</option>
+                                        <option>Soft Skills</option>
+                                        <option>Industry Knowledge</option>
+                                        <option>Languages</option>
+                                    </select>
+                                    <button class="btn btn-outline-secondary" type="button">
+                                        <i class="fas fa-filter"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skills Content -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Skill List</h5>
+                        <div class="small text-muted">Total: 0 skills</div>
+                    </div>
+
+                    <!-- Skills List -->
+                    <div class="card-body">
+                        <!-- Empty State -->
+                        <div class="no-skills-placeholder">
+                            <i class="fas fa-tools fa-3x mb-3 text-muted"></i>
+                            <h5>No skills available</h5>
+                            <p class="mb-3">You haven't added any skills to your system yet.</p>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSkillModal">
+                                <i class="fas fa-plus me-1"></i>Add Your First Skill
+                            </button>
+                        </div>
+
+                        <!-- Skills will be displayed here (hidden for now) -->
+                        <div class="skills-container" style="display: none;">
+                            <div class="mb-4">
+                                <h6 class="border-bottom pb-2 mb-3">Technical <span class="badge bg-primary category-badge">28 skills</span></h6>
+                                <div>
+                                    <span class="badge bg-light text-dark skill-badge">
+                                        JavaScript
+                                        <button class="btn btn-sm p-0 ms-1 text-danger" title="Delete"><i class="fas fa-times"></i></button>
+                                    </span>
+                                    <span class="badge bg-light text-dark skill-badge">
+                                        Python
+                                        <button class="btn btn-sm p-0 ms-1 text-danger" title="Delete"><i class="fas fa-times"></i></button>
+                                    </span>
+                                    <span class="badge bg-light text-dark skill-badge">
+                                        HTML/CSS
+                                        <button class="btn btn-sm p-0 ms-1 text-danger" title="Delete"><i class="fas fa-times"></i></button>
+                                    </span>
+                                    <span class="badge bg-light text-dark skill-badge">
+                                        React.js
+                                        <button class="btn btn-sm p-0 ms-1 text-danger" title="Delete"><i class="fas fa-times"></i></button>
+                                    </span>
+                                    <span class="badge bg-light text-dark skill-badge">
+                                        Node.js
+                                        <button class="btn btn-sm p-0 ms-1 text-danger" title="Delete"><i class="fas fa-times"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6 class="border-bottom pb-2 mb-3">Soft Skills <span class="badge bg-info category-badge">12 skills</span></h6>
+                                <div>
+                                    <span class="badge bg-light text-dark skill-badge">
+                                        Communication
+                                        <button class="btn btn-sm p-0 ms-1 text-danger" title="Delete"><i class="fas fa-times"></i></button>
+                                    </span>
+                                    <span class="badge bg-light text-dark skill-badge">
+                                        Leadership
+                                        <button class="btn btn-sm p-0 ms-1 text-danger" title="Delete"><i class="fas fa-times"></i></button>
+                                    </span>
+                                    <span class="badge bg-light text-dark skill-badge">
+                                        Problem Solving
+                                        <button class="btn btn-sm p-0 ms-1 text-danger" title="Delete"><i class="fas fa-times"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer bg-light">
+                        <a href="#" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Back to Jobs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Skill Modal -->
+    <div class="modal fade" id="addSkillModal" tabindex="-1" aria-labelledby="addSkillModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addSkillModalLabel">
+                        <i class="fas fa-plus-circle text-primary me-2"></i>Add New Skill
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addSkillForm">
+                        <div class="mb-3">
+                            <label for="skillName" class="form-label">Skill Name<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="skillName" placeholder="e.g. JavaScript" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="skillCategory" class="form-label">Category<span class="text-danger">*</span></label>
+                            <select class="form-select" id="skillCategory" required>
+                                <option value="" selected disabled>Select a category</option>
+                                <option value="technical">Technical</option>
+                                <option value="soft">Soft Skills</option>
+                                <option value="industry">Industry Knowledge</option>
+                                <option value="language">Languages</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="skillDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="skillDescription" rows="3" placeholder="Brief description of this skill (optional)"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i>Save Skill
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Delete Modal -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this skill? This action cannot be undone.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light mt-5 py-3 border-top">
+        <div class="container text-center text-muted">
+            <p class="mb-0">&copy; 2025 JobConnect Recruiting Platform. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

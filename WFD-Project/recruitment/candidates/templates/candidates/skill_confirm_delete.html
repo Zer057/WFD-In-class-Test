@@ -1,0 +1,36 @@
+<!-- skill_confirm_delete.html -->
+{% extends "candidates/base.html" %}
+
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-danger text-white">
+          <h5 class="card-title mb-0">
+            <i class="fas fa-exclamation-triangle me-2"></i>Delete Confirmation
+          </h5>
+        </div>
+        <div class="card-body text-center py-4">
+          <i class="fas fa-tools fa-4x text-danger mb-3"></i>
+          <h4>Delete Skill: {{ object.name }}?</h4>
+          <p class="text-muted mb-4">This action cannot be undone. This skill will be removed from all candidates and job postings.</p>
+
+          <form method="post">
+            {% csrf_token %}
+            <div class="d-flex justify-content-center gap-2">
+              <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash-alt me-1"></i>Yes, delete
+              </button>
+              <a href="{% url 'skill_list' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-times me-1"></i>Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

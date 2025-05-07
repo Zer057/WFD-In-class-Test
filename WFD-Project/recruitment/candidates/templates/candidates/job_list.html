@@ -1,0 +1,44 @@
+{% extends "candidates/base.html" %}
+{% load static %}
+
+{% block content %}
+  <h2>Job Listings</h2>
+
+  {% if perms.recruitment.add_job %}
+    <a href="{% url 'job_create' %}" class="btn btn-primary">Add Job</a>
+  {% endif %}
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Skills Required</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for job in jobs %}
+        <tr>
+          <td>{{ job.title }}</td>
+          <td>{{ job.description }}</td>
+          <td>
+            {% for skill in job.skills_required.all %}
+              {{ skill.name }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </td>
+          <td>
+            {% if perms.recruitment.change_job %}
+              <a href="{% url 'job_update' job.pk %}" class="btn btn-sm btn-warning">Edit</a>
+            {% endif %}
+            {% if perms.recruitment.delete_job %}
+              <a href="{% url 'job_delete' job.pk %}" class="btn btn-sm btn-danger">Delete</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="4">No jobs available.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
